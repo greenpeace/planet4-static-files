@@ -29,6 +29,8 @@ jobs:
   deploy:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - run: npx wrangler publish
 
 workflows:
