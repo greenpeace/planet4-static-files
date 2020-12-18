@@ -29,8 +29,7 @@ jobs:
   deploy:
     <<: *defaults
     steps:
-      - attach_workspace:
-          at: /tmp/workspace
+      - run: npm ci
       - run: npx wrangler publish
 
 workflows:
@@ -45,17 +44,8 @@ workflows:
 
   deploy:
     jobs:
-      - build:
-          context: cf-workers
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
       - deploy:
           context: cf-workers
-          requires:
-            - build
           filters:
             branches:
               ignore: /.*/
