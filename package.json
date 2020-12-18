@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "planet4-static-files",
+  "version": "1.0.0",
+  "description": "A Cloudflare Worker for proxying Planet 4 static files from GCP buckets",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write '**/*.{js,css,json,md}'"
+  },
+  "license": "GPLv3",
+  "devDependencies": {
+    "eslint": "^7.15.0"
+  },
+  "dependencies": {
+    "@cloudflare/wrangler": "^1.12.2"
+  }
+}

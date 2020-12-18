@@ -1,0 +1,17 @@
+---
+version: 2.1
+
+jobs:
+  deploy:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout
+      - run: npm install
+      - run: npx wrangler publish
+
+workflows:
+  deploy:
+    jobs:
+      - deploy:
+          context: cf-workers
