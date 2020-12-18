@@ -1,10 +1,15 @@
 ---
 version: 2.1
 
+docker_auth: &docker_auth
+    username: $DOCKERHUB_USERNAME
+    password: $DOCKERHUB_PASSWORD
+
 defaults: &defaults
   docker:
     - image: circleci/node:lts
-  working_directory: /tmp/workspace/app/
+      auth:
+        <<: *docker_auth
 
 jobs:
   build:
@@ -13,34 +18,31 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - checkout
-      - run: npm ci
-      - persist_to_workspace:
-          root: /tmp/workspace
-          paths:
-            - app
-
-  test:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - run: ./node_modules/eslint/bin/eslint.js index.js
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Lint
+          command: ./node_modules/eslint/bin/eslint.js index.js
 
   deploy:
     <<: *defaults
     steps:
-      - run: npm ci
-      - run: npx wrangler publish
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Publish
+          command: npx wrangler publish
 
 workflows:
   branch:
     jobs:
       - build:
           context: cf-workers
-      - test:
-          context: cf-workers
-          requires:
-            - build
 
   deploy:
     jobs:
