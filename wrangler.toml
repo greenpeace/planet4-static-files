@@ -1,4 +1,4 @@
 name = "planet4-static-files"
 type = "javascript"
 workers_dev = false
-route = "www.greenpeace.org/static-testing/*"
+route = "www.greenpeace.org/static/*"
