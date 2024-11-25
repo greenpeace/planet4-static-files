@@ -35,5 +35,12 @@ async function handle(request) {
 
   response = new Response(response.body, response);
 
+  // Decrease browser cache for pdf files to 5 minutes
+  // Default value coming from GCP is 30 days
+  const contentType = response.headers.get('Content-Type') || '';
+  if (contentType.startsWith('application/pdf')) {
+    response.headers.set('Cache-Control', 'public, max-age=300');
+  }
+
   return response;
 }
